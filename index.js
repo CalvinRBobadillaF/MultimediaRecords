@@ -5,6 +5,14 @@ const URL_TOP_RATED = `https://api.themoviedb.org/3/movie/top_rated?api_key=${AP
 const URL_EN_CARTELERA = `https://api.themoviedb.org/3/movie/now_playing?api_key=${API_KEY}&language=es-ES&page=1`;
 const URL_PROXIMAMENTE = `https://api.themoviedb.org/3/movie/upcoming?api_key=${API_KEY}&language=es-ES&page=1`;
 
+//ANIME
+
+const animeURL_POPULARITY = `https://api.jikan.moe/v4/top/anime?filter=bypopularity`
+const animeURL_TOP = `https://api.jikan.moe/v4/top/anime`
+const animeURL_NOW = `https://api.jikan.moe/v4/seasons/now`
+const animeURL_TOPmovie = `https://api.jikan.moe/v4/anime?type=movie`
+  
+
 // DOM ID'S
 const input = document.getElementById('input')
 const popularMovies = document.getElementById('movie-poster')
@@ -23,11 +31,12 @@ const popularity = document.getElementById('popularity')
 const calification = document.getElementById('calification')
 const release = document.getElementById('release')
 const filterButton = document.getElementById('filter-button')
+const comingSoonP = document.getElementById('coming-soonP')
 const Filter = document.getElementById('Filter')
-const Heroes = document.getElementById('Heroes')
-const Action = document.getElementById('Action')
-const Comedy = document.getElementById('Comedy')
-const Drama = document.getElementById('Drama')
+const AnimeId = document.getElementById('Anime')
+const Movies = document.getElementById('Movies')
+const Books = document.getElementById('Books')
+const Music = document.getElementById('Music')
 const popularP = document.getElementById('popular-p')
 const all = document.getElementById('All')
 const close = document.getElementById('close')
@@ -41,6 +50,11 @@ let allPopularMovies = []
 let allComingSoon = []
 let allTopRated = []
 let allNowPlaying = []
+
+let allPopularAnime = []
+let allTopRatedAnime = []
+let allSeasonAnime = []
+
 let genre_id = []
 
 // Mostrar detalles de película
@@ -90,7 +104,33 @@ async function fetchAndRenderMovies(url, container, saveInMemory = false) {
   }
 }
   
-  
+  async function fetchAndRenderAnime(url, container, saveInMemory = false) {
+  const response = await fetch(url)
+  const data = await response.json()
+  const animes = data.data
+    console.log(animes)
+  container.innerHTML = ""
+
+  animes.forEach(anime => {
+    const fullPoster = anime.images.jpg.image_url
+    const img = document.createElement("img")
+    img.src = fullPoster
+    img.alt = anime.title
+    container.appendChild(img)
+
+    img.addEventListener('click', () => {
+      showDetailsFromAnime(anime)
+    })
+  })
+
+  if (url.includes('top/anime')) {
+  allTopRatedAnime = animes
+} else if (url.includes('bypopularity')) {
+  allPopularAnime = animes
+} else if (url.includes('seasons/now')) {
+  allSeasonAnime = animes
+}
+}
 
 
 // Mostrar información en la vista de detalles
@@ -111,12 +151,29 @@ function showDetailsFromMovie(movie) {
   displayDetails()
 }
 
+function showDetailsFromAnime(anime) {
+  showDetailsPoster.innerHTML = ''
+  title.textContent = anime.title
+  sinopsis.textContent = anime.synopsis
+
+  
+  const detailImg = document.createElement('img')
+  detailImg.src = anime.images.jpg.image_url
+  detailImg.alt = anime.title
+  showDetailsPoster.appendChild(detailImg)
+  
+  calification.textContent = `Popular vote: ${anime.score}`
+  popularity.textContent = `Favorite of: ${anime.favorites}`
+  release.textContent = `Original release: ${anime.aired.from}`
+  
+  displayDetails()
+}
+
 returnButton.addEventListener('click', returnToHome)
 
 // Buscar y mostrar resultados
 function displaySearchResults(list) {
   popularMovies.innerHTML = ""
-  
 
   if (list.length == '') {
     popularMovies.innerHTML = "<p>No se encontraron resultados.</p>"
@@ -136,7 +193,29 @@ function displaySearchResults(list) {
   })
 }
 
+function displaySearchResultsAnime(list) {
+  popularMovies.innerHTML = ""
+  
+  if (list.length === 0) {
+    popularMovies.innerHTML = "<p>No se encontraron resultados.</p>"
+    
+    return
+  }
 
+
+  list.forEach(anime => {
+    const img = document.createElement("img")
+    img.src = anime.images.jpg.image_url
+    img.alt = anime.title
+    popularMovies.appendChild(img)
+    img.addEventListener('click', () => showDetailsFromAnime(anime))
+    
+  })
+
+  
+}
+
+/*
 async function showTypeMovies(type) {
   
   await fetchData(URL_EN_CARTELERA)
@@ -160,7 +239,7 @@ async function showTypeMovies(type) {
   )
   displaySearchResults(typeMovies)
   
-}
+}*/
 
 function showFilterSection () {
 Filter.classList.toggle('show')
@@ -179,6 +258,7 @@ async function startApp() {
       ...allTopRated,
       ...allNowPlaying
     ]
+    
 
   input.addEventListener("input", () => {
     
@@ -190,6 +270,7 @@ async function startApp() {
     popularP.textContent = 'Popular'
     }
     
+    
     const filtered = allMovies.filter(movie =>
       movie.title && movie.title.toLowerCase().includes(searchTerm)
       
@@ -199,22 +280,52 @@ async function startApp() {
   })
 }
 
-Heroes.addEventListener('click', () => {
-  showTypeMovies(typeHeroe)
+async function animeStart() {
+  await fetchAndRenderAnime(animeURL_TOP, popularMovies)
+  await fetchAndRenderAnime(animeURL_NOW, suggestion)
+  await fetchAndRenderAnime(animeURL_POPULARITY, topRated)
+  comingSoonP.textContent = ` `
+  comingSoon.style.display = 'none'
+
+  const allAnime = [
+      ...allPopularAnime,
+      ...allSeasonAnime,
+      ...allTopRatedAnime
+      
+    ]
+console.log("Total animes cargados:", allAnime.length)
+  input.addEventListener("input", () => {
+    
+    const searchTerm = input.value.toLowerCase()
+    if (searchTerm.trim() != "") {
+    popularP.textContent = 'Resultados de búsqueda:'
+    } else {
+    popularP.textContent = 'Popular'
+    }
+    console.log("Buscando:", searchTerm)
+    const filtered = allAnime.filter(anime =>
+      anime.title_english && anime.title_english.toLowerCase().includes(searchTerm)
+      
+    )
+    console.log(filtered)
+    displaySearchResultsAnime(filtered)
+  })
+}
+
+Movies.addEventListener('click', () => {
+  startApp()
   showFilterSection()
-  popularP.textContent = `Mostrar las de: Heroes`
 })
-Comedy.addEventListener('click', () => {
-  showTypeMovies(typeComedy)
-  showFilterSection()
-  popularP.textContent = `Mostrar las de: Comedia`
+AnimeId.addEventListener('click', () => {
+  animeStart()
+showFilterSection()
 })
-Action.addEventListener('click', () => {
+Books.addEventListener('click', () => {
   showTypeMovies(typeAction)
   showFilterSection()
   popularP.textContent = `Mostrar las de: Accion`
 })
-Drama.addEventListener('click', () => {
+Music.addEventListener('click', () => {
   showTypeMovies(typeDrama)
   showFilterSection()
   popularP.textContent = `Mostrar las de: Drama`
