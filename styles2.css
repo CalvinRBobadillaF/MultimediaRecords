@@ -1,0 +1,221 @@
+/* =====================
+   Variables y base
+   ===================== */
+:root {
+  --bg-dark: #0d0e1a;
+  --card-bg: #1a1c2e;
+  --accent: #5e33ff;
+  --accent-hover: #7a56ff;
+  --text-light: #ffffff;
+  --text-muted: #ccc;
+}
+
+html {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* =====================
+   HEADER
+   ===================== */
+.Header-section {
+  padding: 20px 16px 10px;
+  background: var(--bg-dark);
+}
+
+.Header-div p#date {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+}
+
+.Header-div p:nth-child(2) {
+  font-size: 2.3rem;
+  color: var(--text-light);
+}
+
+/* Barra de búsqueda */
+.search-bar {
+  position: relative;
+  margin-top: 8px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 13px 20px 13px 45px;
+  border: none;
+  border-radius: 25px;
+  background: var(--card-bg);
+  color: var(--text-light);
+  font-size: 1.6rem;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px; height: 24px;
+  pointer-events: none;
+}
+
+/* =====================
+   CARRUSELES
+   ===================== */
+.movie-poster,
+.coming-poster,
+.movie-suggestions,
+.top-rated {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  margin: 12px 0;
+}
+
+.movie-poster img,
+.coming-poster img,
+.movie-suggestions img,
+.top-rated img {
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--card-bg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.movie-poster img:hover,
+.coming-poster img:hover,
+.movie-suggestions img:hover,
+.top-rated img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+}
+
+/* =====================
+   SECCIÓN DETALLES
+   ===================== */
+#Movie-details {
+  position: fixed;
+  top: 0; left: 100%;
+  width: 100vw; height: 100vh;
+  background: var(--bg-dark);
+  padding: 24px;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 100;
+}
+
+#Movie-details.open {
+  left: 0;
+}
+
+.Movie-details-button {
+  position: absolute;
+  top: 24px;
+  width: 40px; height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(30,32,50,0.7);
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+#returnButton {
+  left: 24px;
+}
+
+.Movie-details-button:nth-child(2) {
+  right: 24px;
+}
+
+/* Poster grande */
+#showDetails-poster img {
+  width: 100%;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+}
+
+/* Título y sinopsis */
+.Movie-title {
+  display: block;
+  text-align: left;
+  font-size: 2.4rem;
+  margin: 16px 0 8px;
+  color: var(--text-light);
+}
+
+.sinopsis {
+  text-align: left;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+/* Información */
+.Movie-information-title {
+  text-align: left;
+  font-size: 2rem;
+  margin: 32px 0 16px;
+}
+
+.Movie-cast p {
+  text-align: left;
+  font-size: 1.6rem;
+  margin: 4px 0;
+  color: var(--text-light);
+}
+
+/* Botón de reservación */
+.Where-watch-button {
+  display: block;
+  width: calc(100% - 48px);
+  margin: 32px auto 0;
+  padding: 14px;
+  background: var(--accent);
+  color: var(--text-light);
+  border: none;
+  border-radius: 24px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.Where-watch-button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* =====================
+   FOOTER / NAV
+   ===================== */
+.Nav {
+  background: var(--card-bg);
+  padding: 8px 0;
+  position: sticky;
+  bottom: 0;
+}
+
+.svg-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.svg-container svg {
+  width: 7vw; height: 8.5vh;
+  padding: 0 30px;
+  color: var(--text-muted);
+  transition: background 0.2s ease;
+}
+
+.svg-container svg:hover {
+  background: var(--bg-dark);
+}

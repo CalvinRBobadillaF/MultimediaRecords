@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <title>The Movie Records</title>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="Header-section" id="header">
+    <div class="Header-div">
+      <p id="date">May 28 10:12am</p>
+      <p>Discover Movies</p>
+      <div class="icons">🔔✨</div>
+      <div class="search-bar" id="search-bar">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
+          <path d="M21.53 20.47l-4.82-4.82A7.94 7.94 0 0018 10a8 8 0 10-8 8 7.94 7.94 0 005.65-2.29l4.82 4.82a.75.75 0 101.06-1.06zM4 10a6 6 0 1112 0 6 6 0 01-12 0z"/>
+        </svg>
+        <input type="text" placeholder="Search..." id="input"/>
+        <button class="filter-button" id="filter-button">⚙️</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+   
+  <main class="Main-section" id="Main">
+    <p class="main-p" id="popular-p">Popular</p>
+    <div class="movie-poster" id="movie-poster">
+      
+    </div>
+    <p class="main-p" >Coming Soon</p>
+    <div class="coming-poster" id="coming-soon">
+      
+    </div>
+    <p class="main-p">Suggestions</p>
+    <div class="movie-suggestions" id="movie-suggestions">
+      
+    </div>
+    <p class="main-p">Top-rated</p>
+    <div class="top-rated" id="top-rated">
+      
+    </div>
+    <!-- Aquí van las películas o resultados -->
+
+  </main>
+
+  <section class="" id="Filter">
+    <div>
+      <p id="All">Todas</p>
+      <p id="Heroes">SUPERHEROES</p>
+      <p id="Action">ACTION</p>
+      <p id="Comedy">COMEDY</p>
+      <p id="Drama">Drama</p>
+    </div>
+  </section>
+
+  <section id="Movie-details">
+    
+      <button class="Movie-details-button" id="returnButton"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18" />
+</svg>
+</button>
+      
+
+<div id="showDetails-poster">
+
+
+
+</div>
+<div class="experiment">
+    <h1 class="Movie-title" id="title"></h1>
+      <img src="" alt="" id="img">
+
+    <p class="sinopsis" id="sinopsis">
+      
+    </p>
+    
+    <h2 class="Movie-information-title">Information</h2>
+    <div class="Movie-cast">
+    <p id="popularity"></p>
+    <p id="calification"></p>
+    <p id="release"></p>
+    <div class="button-container">
+    <button class="Where-watch-button">Watch</button>
+    </div>
+  </div>
+  </section>
+  
+
+  <!-- FOOTER / NAV -->
+  <footer class="Nav">
+    <nav class="main-nav">
+      <div class="svg-container">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" />
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 0 1 0 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 0 1 0-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
+</svg>
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+</svg>
+        
+
+      </div>
+    </nav>
+  </footer>
+  <script src="index.js"></script>
+</body>
+</html>
+
+
+
