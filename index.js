@@ -30,6 +30,7 @@ const Comedy = document.getElementById('Comedy')
 const Drama = document.getElementById('Drama')
 const popularP = document.getElementById('popular-p')
 const all = document.getElementById('All')
+const close = document.getElementById('close')
 
 const typeHeroe = 28
 const typeComedy = 35
@@ -223,6 +224,8 @@ all.addEventListener('click', () => {
   showFilterSection()
   popularP.textContent = 'Popular'
 })
+
+close.addEventListener('click', showFilterSection)
 
 filterButton.addEventListener('click', showFilterSection)
 startApp()
