@@ -75,7 +75,7 @@ img:hover {
 }
 
 .search-bar input {
-  width: 60%;
+  width: 70%;
   height: 26px;
   padding: 13px 20px 13px 45px;
   border: none;
@@ -142,6 +142,7 @@ img:hover {
 .movie-suggestions::-webkit-scrollbar {
   display: none;
 }
+
 
 
 
@@ -378,16 +379,25 @@ img:hover {
     background-color: white;
     
 }
-
+.filter-button {
+  display: none;
+}
 .svg-container {
     width: 100%;
     display: flex;
     justify-content: space-between;
     
 }
+
+.nav-p {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+} 
+
 .svg-container svg {
     width: 7vw;
-    height: 8.5vh;
+    height: 5vh;
     padding: 0 30px;
     color: wheat;
 }

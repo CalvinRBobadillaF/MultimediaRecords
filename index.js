@@ -13,6 +13,20 @@ const animeURL_NOW = `https://api.jikan.moe/v4/seasons/now`
 const animeURL_TOPmovie = `https://api.jikan.moe/v4/anime?type=movie`
   
 
+//Music 
+const musicKey = `dc3ba24e72af95c15356895c6af3766a`
+const secret2 = `8aeb17b83fbe81dad0f33232c066077b`
+//const music_popular = `https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=michaeljackson&api_key=dc3ba24e72af95c15356895c6af37https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=rock&api_key=dc3ba24e72af95c15356895c6af3766a&format=json`
+const music_popular = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=rock&api_key=dc3ba24e72af95c15356895c6af3766a&format=json
+`
+const electronicMusic = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=electronic&api_key=dc3ba24e72af95c15356895c6af3766a&format=json`
+const popMusic = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=pop&api_key=dc3ba24e72af95c15356895c6af3766a&format=json`
+const indieMusic = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=indie&api_key=dc3ba24e72af95c15356895c6af3766a&format=json`
+
+let allPop = []
+let allIndie = []
+let allRock = []
+let allElectronic = []
 // DOM ID'S
 const input = document.getElementById('input')
 const popularMovies = document.getElementById('movie-poster')
@@ -40,6 +54,10 @@ const Music = document.getElementById('Music')
 const popularP = document.getElementById('popular-p')
 const all = document.getElementById('All')
 const close = document.getElementById('close')
+const topRatedP = document.getElementById('top-ratedP')
+const suggestionP = document.getElementById('suggestionsP')
+
+
 
 const typeHeroe = 28
 const typeComedy = 35
@@ -132,6 +150,56 @@ async function fetchAndRenderMovies(url, container, saveInMemory = false) {
 }
 }
 
+async function fetchAndRenderMusic(url, container, saveInMemory = false) {
+  
+  const response = await fetch(url)
+  const data = await response.json()
+
+  const albums = data.albums?.album // <- ahora es "albums", no "topalbums"
+  if (!albums) {
+    console.error("No se pudieron cargar los álbumes", data)
+    return
+  }
+console.log(albums)
+  
+  container.innerHTML = ""
+
+  albums.forEach(album => {
+    const fullPoster = album.image[3]['#text'] || "imagen_no_disponible.jpg"
+    const img = document.createElement('img')
+    img.src = fullPoster
+    img.alt = album.name
+    container.appendChild(img)
+    img.addEventListener('click', () => {
+      showDetailsFromMusic(album)
+    })
+  })
+
+  if (saveInMemory) {
+    if (url === popMusic) allPop = albums
+    else if (url === music_popular) allRock = albums
+    else if (url === indieMusic) allIndie = albums
+    else if (url === electronicMusic) allElectronic = albums
+  }
+}
+
+function showDetailsFromMusic(music) {
+  showDetailsPoster.innerHTML = ''
+  title.textContent = music.artist.name
+  sinopsis.textContent = music.name
+
+  const detailImg = document.createElement('img')
+  detailImg.src = music.image[3]['#text'] || "imagen_no_disponible.jpg"
+  detailImg.alt = music.name
+  showDetailsPoster.appendChild(detailImg)
+  
+  calification.textContent = `Calificacion: No disponible :(`
+  popularity.textContent = `Popularidad: No disponible :(`
+  release.textContent = `Lanzamiento: No disponible :(`
+  
+  displayDetails()
+}
+
 
 // Mostrar información en la vista de detalles
 function showDetailsFromMovie(movie) {
@@ -215,31 +283,27 @@ function displaySearchResultsAnime(list) {
   
 }
 
-/*
-async function showTypeMovies(type) {
+function displaySearchResultsMusic(list) {
+  popularMovies.innerHTML = ""
   
-  await fetchData(URL_EN_CARTELERA)
-  await fetchData(URL_POPULARES)
-  await fetchData(URL_TOP_RATED)
-  await fetchData(URL_PROXIMAMENTE) 
+  if (list.length === 0) {
+    popularMovies.innerHTML = "<p>No se encontraron resultados.</p>"
+    
+    return
+  }
+
+
+  list.forEach(music => {
+    const img = document.createElement("img")
+    img.src = music.image[3]['#text'] || "imagen_no_disponible.jpg"
+    img.alt = music.name
+    popularMovies.appendChild(img)
+    img.addEventListener('click', () => showDetailsFromMusic(music))
+    
+  })
 
   
-  
-
-  const allMovies = [
-      ...allPopularMovies,
-      ...allComingSoon,
-      ...allTopRated,
-      ...allNowPlaying
-    ]
-
-  // Filtra películas que incluyen el género 28 (Acción)
-  const typeMovies = allMovies.filter(movie => 
-    movie.genre_ids.includes(type)
-  )
-  displaySearchResults(typeMovies)
-  
-}*/
+}
 
 function showFilterSection () {
 Filter.classList.toggle('show')
@@ -312,27 +376,68 @@ console.log("Total animes cargados:", allAnime.length)
   })
 }
 
+async function musicStart() {
+  await fetchAndRenderMusic(music_popular, popularMovies, true)
+  await fetchAndRenderMusic(electronicMusic, suggestion, true)
+  await fetchAndRenderMusic(popMusic, comingSoon, true)
+  await fetchAndRenderMusic(indieMusic, topRated, true)
+
+  const allMusic = [
+      ...allIndie,
+      ...allRock,
+      ...allPop,
+      ...allElectronic
+      
+    ]
+console.log("Total canciones cargadas:", allMusic.length)
+  input.addEventListener("input", () => {
+    
+    const searchTerm = input.value.toLowerCase()
+    if (searchTerm.trim() != "") {
+    popularP.textContent = 'Resultados de búsqueda:'
+    } else {
+    popularP.textContent = 'Pop'
+    }
+    console.log("Buscando:", searchTerm)
+    const filtered = allMusic.filter(music =>
+      music.name && music.name.toLowerCase().includes(searchTerm)
+      
+    )
+    console.log(filtered)
+    displaySearchResultsMusic(filtered)
+  })
+}
+
 Movies.addEventListener('click', () => {
   startApp()
-  showFilterSection()
+  comingSoon.style.display = 'flex'
+  comingSoonP.textContent = 'Coming soon'
 })
 AnimeId.addEventListener('click', () => {
   animeStart()
-showFilterSection()
+  popularP.textContent = `Popular`
+  comingSoonP.textContent = `Coming Soon`
+  suggestionP.textContent = `Suggestions `
+  topRatedP.textContent = `Top Rated`
+
 })
 Books.addEventListener('click', () => {
   showTypeMovies(typeAction)
-  showFilterSection()
+  
   popularP.textContent = `Mostrar las de: Accion`
 })
 Music.addEventListener('click', () => {
-  showTypeMovies(typeDrama)
-  showFilterSection()
-  popularP.textContent = `Mostrar las de: Drama`
+  musicStart()
+  popularP.textContent = `Rock`
+  comingSoonP.textContent = `Electronic`
+  suggestionP.textContent = `Pop`
+  topRatedP.textContent = `Indie`
+  comingSoon.style.display = 'flex'
+  
 })
 all.addEventListener('click', () => {
   fetchAndRenderMovies(URL_POPULARES,popularMovies, true)
-  showFilterSection()
+  
   popularP.textContent = 'Popular'
 })
 
