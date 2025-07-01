@@ -16,7 +16,6 @@ const animeURL_TOPmovie = `https://api.jikan.moe/v4/anime?type=movie`
 //Music 
 const musicKey = `dc3ba24e72af95c15356895c6af3766a`
 const secret2 = `8aeb17b83fbe81dad0f33232c066077b`
-//const music_popular = `https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=michaeljackson&api_key=dc3ba24e72af95c15356895c6af37https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=rock&api_key=dc3ba24e72af95c15356895c6af3766a&format=json`
 const music_popular = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=rock&api_key=dc3ba24e72af95c15356895c6af3766a&format=json
 `
 const electronicMusic = `https://ws.audioscrobbler.com/2.0/?method=tag.gettopalbums&tag=electronic&api_key=dc3ba24e72af95c15356895c6af3766a&format=json`
@@ -27,6 +26,22 @@ let allPop = []
 let allIndie = []
 let allRock = []
 let allElectronic = []
+
+//Books 
+
+const apiKeyBooks = `AIzaSyC68sJrMbECwvuNsjcDjLCfYXBtjU_97qQ`
+const volumes = `https://www.googleapis.com/books/v1/volumes`
+const popularBooks = `https://www.googleapis.com/books/v1/volumes?q=bestsellers&orderBy=newest&key=${apiKeyBooks}`
+const topRatedBooks = `https://www.googleapis.com/books/v1/volumes?q=most+popular+books&key=AIzaSyC68sJrMbECwvuNsjcDjLCfYXBtjU_97qQ`
+const technologyBooks = `https://www.googleapis.com/books/v1/volumes?q=subject:technology&orderBy=relevance&key=AIzaSyC68sJrMbECwvuNsjcDjLCfYXBtjU_97qQ`
+const psychologyBooks = `https://www.googleapis.com/books/v1/volumes?q=subject:psychology&orderBy=relevance&key=AIzaSyC68sJrMbECwvuNsjcDjLCfYXBtjU_97qQ`
+
+let allPopularBooks = []
+let allTopRatedBooks = []
+let allTech = []
+let allPsyschology = []
+
+
 // DOM ID'S
 const input = document.getElementById('input')
 const popularMovies = document.getElementById('movie-poster')
@@ -93,10 +108,14 @@ function returnToHome() {
 async function fetchData(URL) {
   const response = await fetch(URL)
   const data = await response.json()
+    if (data.results) return data.results         // TMDB
+  if (data.items) return data.items             // Google Books
+  if (data.data) return data.data               // Jikan (anime)
   
-  return data.results
 
 }
+
+
 
 // Renderizar y manejar clics
 async function fetchAndRenderMovies(url, container, saveInMemory = false) {
@@ -121,8 +140,56 @@ async function fetchAndRenderMovies(url, container, saveInMemory = false) {
     else if (url === URL_EN_CARTELERA) allNowPlaying = movies
   }
 }
+
+
+async function fetchAndRenderBooks(url, container, saveInMemory = false) {
+  const books = await fetchData(url)
+  container.innerHTML = ""
+  console.log(books)
   
-  async function fetchAndRenderAnime(url, container, saveInMemory = false) {
+  books.forEach(book => {
+    const thumbnail = book.volumeInfo?.imageLinks?.smallThumbnail || ""
+    const title = book.volumeInfo?.title || "Sin título"
+    const img = document.createElement("img")
+    img.src = thumbnail
+    img.alt = title
+    container.appendChild(img)
+
+  })
+
+  if (saveInMemory) {
+    if (url === popularBooks) allPopularBooks = books
+    else if (url === topRatedBooks) allTopRatedBooks = books
+    else if (url === technologyBooks) allTech = books
+    else if (url === psychologyBooks) allPsyschology = books
+  }
+  
+}
+
+function displaySearchResultsBook(list) {
+  popularMovies.innerHTML = ""
+  
+  if (list.length === 0) {
+    popularMovies.innerHTML = "<p>No se encontraron resultados.</p>"
+    
+    return
+  }
+
+
+  list.forEach(book => {
+    const thumbnail = book.volumeInfo?.imageLinks?.smallThumbnail || ""
+    const title = book.volumeInfo?.title || "Sin título"
+    const img = document.createElement("img")
+    img.src = thumbnail
+    img.alt = title
+    container.appendChild(img)
+    
+  })
+
+  
+}
+  
+  async function fetchAndRenderAnime(url, container) {
   const response = await fetch(url)
   const data = await response.json()
   const animes = data.data
@@ -408,6 +475,39 @@ console.log("Total canciones cargadas:", allMusic.length)
   })
 }
 
+async function bookStart() {
+  fetchAndRenderBooks(popularBooks, popularMovies, true)
+  fetchAndRenderBooks(topRatedBooks, topRated, true)
+  fetchAndRenderBooks(technologyBooks, comingSoon, true)
+  fetchAndRenderBooks(psychologyBooks, suggestion, true)
+
+  const allBooks = [
+      ...allPopularBooks,
+      ...allTopRatedBooks,
+      ...allPsyschology,
+      ...allTech
+      
+    ]
+console.log("Total libros cargadas:", allBooks.length)
+  input.addEventListener("input", () => {
+    
+    const searchTerm = input.value.toLowerCase()
+    if (searchTerm.trim() != "") {
+    popularP.textContent = 'Resultados de búsqueda:'
+    } else {
+    popularP.textContent = 'Popular'
+    }
+    console.log("Buscando:", searchTerm)
+    const filtered = allBooks.filter(book =>
+      book.name && book.name.toLowerCase().includes(searchTerm)
+      
+    )
+    console.log(filtered)
+    displaySearchResultsBook(filtered)
+  })
+}
+
+
 Movies.addEventListener('click', () => {
   startApp()
   comingSoon.style.display = 'flex'
@@ -422,9 +522,13 @@ AnimeId.addEventListener('click', () => {
 
 })
 Books.addEventListener('click', () => {
-  showTypeMovies(typeAction)
+  bookStart()
+  popularP.textContent = `Popular`
+  comingSoonP.textContent = `Tech & science`
+  suggestionP.textContent = `Psychology `
+  topRatedP.textContent = `Top Rated`
+  comingSoon.style.display = 'flex'
   
-  popularP.textContent = `Mostrar las de: Accion`
 })
 Music.addEventListener('click', () => {
   musicStart()
