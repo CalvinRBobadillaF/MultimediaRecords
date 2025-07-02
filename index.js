@@ -154,6 +154,10 @@ async function fetchAndRenderBooks(url, container, saveInMemory = false) {
     img.src = thumbnail
     img.alt = title
     container.appendChild(img)
+    img.addEventListener('click', () => {
+      showDetailsFromBook(book)
+    })
+
 
   })
 
@@ -163,8 +167,12 @@ async function fetchAndRenderBooks(url, container, saveInMemory = false) {
     else if (url === technologyBooks) allTech = books
     else if (url === psychologyBooks) allPsyschology = books
   }
-  
 }
+  
+
+  
+  
+
 
 function displaySearchResultsBook(list) {
   popularMovies.innerHTML = ""
@@ -182,11 +190,30 @@ function displaySearchResultsBook(list) {
     const img = document.createElement("img")
     img.src = thumbnail
     img.alt = title
-    container.appendChild(img)
+    popularMovies.appendChild(img)
+    img.addEventListener("click", () => showDetailsFromBook(book))
     
   })
 
   
+}
+
+function showDetailsFromBook(book) {
+  showDetailsPoster.innerHTML = ''
+  title.textContent = book.volumeInfo.title
+  sinopsis.textContent = book.volumeInfo.description
+
+  const detailImg = document.createElement('img')
+  const thumbnail = book.volumeInfo?.imageLinks?.smallThumbnail || ""
+  detailImg.src = thumbnail
+  detailImg.alt = book.volumeInfo.title
+  showDetailsPoster.appendChild(detailImg)
+  
+  calification.textContent = `Calification: ${book.volumeInfo.averageRating}`
+  popularity.textContent = `Category: ${book.volumeInfo.categories}`
+  release.textContent = `Released on: ${book.volumeInfo.publishedDate}`
+  
+  displayDetails()
 }
   
   async function fetchAndRenderAnime(url, container) {
@@ -476,18 +503,18 @@ console.log("Total canciones cargadas:", allMusic.length)
 }
 
 async function bookStart() {
-  fetchAndRenderBooks(popularBooks, popularMovies, true)
-  fetchAndRenderBooks(topRatedBooks, topRated, true)
-  fetchAndRenderBooks(technologyBooks, comingSoon, true)
-  fetchAndRenderBooks(psychologyBooks, suggestion, true)
+  await fetchAndRenderBooks(popularBooks, popularMovies, true)
+  await fetchAndRenderBooks(topRatedBooks, topRated, true)
+  await fetchAndRenderBooks(technologyBooks, comingSoon, true)
+  await fetchAndRenderBooks(psychologyBooks, suggestion, true)
 
   const allBooks = [
       ...allPopularBooks,
       ...allTopRatedBooks,
       ...allPsyschology,
       ...allTech
-      
     ]
+
 console.log("Total libros cargadas:", allBooks.length)
   input.addEventListener("input", () => {
     
@@ -496,10 +523,11 @@ console.log("Total libros cargadas:", allBooks.length)
     popularP.textContent = 'Resultados de búsqueda:'
     } else {
     popularP.textContent = 'Popular'
+    
     }
     console.log("Buscando:", searchTerm)
-    const filtered = allBooks.filter(book =>
-      book.name && book.name.toLowerCase().includes(searchTerm)
+    const filtered = allBooks.filter(book => 
+      book.volumeInfo.title && book.volumeInfo.title.toLowerCase().includes(searchTerm)
       
     )
     console.log(filtered)
