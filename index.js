@@ -540,6 +540,7 @@ Movies.addEventListener('click', () => {
   startApp()
   comingSoon.style.display = 'flex'
   comingSoonP.textContent = 'Coming soon'
+  returnToHome()
 })
 AnimeId.addEventListener('click', () => {
   animeStart()
@@ -547,6 +548,7 @@ AnimeId.addEventListener('click', () => {
   comingSoonP.textContent = `Coming Soon`
   suggestionP.textContent = `Suggestions `
   topRatedP.textContent = `Top Rated`
+  returnToHome()
 
 })
 Books.addEventListener('click', () => {
@@ -556,6 +558,7 @@ Books.addEventListener('click', () => {
   suggestionP.textContent = `Psychology `
   topRatedP.textContent = `Top Rated`
   comingSoon.style.display = 'flex'
+  returnToHome()
   
 })
 Music.addEventListener('click', () => {
@@ -565,7 +568,7 @@ Music.addEventListener('click', () => {
   suggestionP.textContent = `Pop`
   topRatedP.textContent = `Indie`
   comingSoon.style.display = 'flex'
-  
+  returnToHome()
 })
 all.addEventListener('click', () => {
   fetchAndRenderMovies(URL_POPULARES,popularMovies, true)
