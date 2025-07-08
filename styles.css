@@ -244,7 +244,7 @@ img:hover {
 }
 
 
-#Movie-details {
+#Content-details {
   display: none;
   width: auto;
   height: 91vh;
@@ -253,7 +253,7 @@ img:hover {
   
 }
 
-#Movie-details img {
+#Content-details img {
   
     width: 100%;
     
@@ -422,4 +422,165 @@ img:hover {
   border: transparent;
   background-color: #0d0e1a;
   color: white;
+}
+
+
+@media (min-width: 700px) {
+body {
+  grid-template-areas: "nav header header"
+  "nav main main"
+  "nav main main";
+  font-family: 'Poppins', sans-serif;
+}
+
+.Header-section {
+  grid-area: header;
+}
+.Nav {
+  grid-area: nav;
+  height: 100vh;
+  width: 100px;
+}
+
+
+.svg-container {
+  display: block;
+}
+
+.Main-section {
+  grid-area: main;
+  
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+}
+
+.search-bar input {
+  width: 300px;
+}
+
+.search-icon {
+  display: none;
+}
+
+#date {
+  display: none;
+}
+
+.Header-div p:nth-child(2) {
+  display: none;
+}
+
+.icons {
+  display: none;
+}
+
+.main-p {
+  text-align: center;
+}
+
+#suggestionsP {
+  margin-bottom: 20px;
+}
+
+#top-ratedP {
+  margin-top: 20px;
+}
+
+.nav-p {
+  display: flex;
+  align-items: center; /* centra verticalmente */
+  gap: 8px; /* espacio entre el icono y el texto */
+  margin-bottom: 10px; /* opcional, para separar los items */
+  cursor: pointer;
+}
+
+.nav-p svg {
+  width: 24px;
+  height: 24px;
+}
+
+.nav-p:hover {
+  background-color: #0d0e1a;
+}
+
+/* Aplica a todo el sitio */
+* {
+  scrollbar-width: thin; /* Para Firefox */
+  scrollbar-color: #888 transparent; /* Para Firefox */
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;       /* vertical scrollbar */
+  height: 8px;      /* horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* color del scroll */
+  border-radius: 10px;
+  border: 2px solid transparent; /* espacio interno */
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+#showDetails-poster {
+  display: flex;
+  justify-content: center;
+}
+#showDetails-poster img {
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.Movie-title {
+  text-align: center;
+}
+
+.sinopsis {
+  text-align: center;
+  
+}
+
+.sinopsis p {
+  margin-top: 20px;
+  padding: 15px 20px;
+  background-color: #1a1a2e;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  color: #ddd;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.Where-watch-button {
+  width: 25vw;
+  background-color: #3b44f6;
+  color: white;
+  transition: background-color 0.3s;
+  list-style: none;
+}
+.Where-watch-button:hover {
+  background-color: #2d33c7;
+}
+
+#link {
+  text-decoration: none;
+  color: white;
+}
+#returnButton {
+  position: fixed;
+  top: 20px;
+  left: 120px; /* ajusta según tu sidebar */
+  z-index: 1000;
+}
 }
