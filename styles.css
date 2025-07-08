@@ -32,6 +32,11 @@ body {
   
 }
 
+.waterMark {
+  font-size: 1.5rem;
+  text-decoration: none;
+  color: #7a36fa;
+}
 
 
 img:hover {
